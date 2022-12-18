@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.2
+Type=Application
+Name=Messaging
+Exec=/usr/bin/cutie-messaging
+TryExec=/usr/bin/cutie-messaging
+Icon=cutie-messaging
+Terminal=false
+StartupNotify=false
