@@ -23,6 +23,7 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, fa
 		QCoreApplication::exit(-1);
 		},
 		Qt::QueuedConnection);
+	engine.rootContext()->setContextProperty("Store", &store);
 	engine.load(url);
 
 	if (!parser.isSet(daemonOption))

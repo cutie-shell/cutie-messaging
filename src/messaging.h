@@ -9,6 +9,7 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 #include <singleapplication.h>
+#include "messagestore.h"
 #include "ofonomodem.h"
 
 class Messaging : public SingleApplication {
@@ -21,6 +22,7 @@ public Q_SLOTS:
 private:
 	QQmlApplicationEngine engine;
 	QTranslator translator;
+	MessageStore store;
 	QMap<QString,OfonoModem *> m_modems;
 };
 
