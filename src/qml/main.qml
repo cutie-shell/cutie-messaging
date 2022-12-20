@@ -8,9 +8,7 @@ CutieWindow {
 	visible: false
 	title: qsTr("Messaging")
 
-	ListModel {
-		id: threads
-	}
+	property var threadPage: Qt.createComponent("Thread.qml")
 
 	onClosing: {
 		visible = false;
@@ -22,10 +20,14 @@ CutieWindow {
 	}
 
 	function incomingMessage(sender, message) {
-		threads.append({
+		let threads = Store.threads;
+		let thread = threads.filter(t => t.Sender == sender)[0];
+		if (thread) thread.Messages.push(message);
+		else threads.push({
 			"Sender": sender,
 			"Messages": [message,]
 		});
+		Store.threads = threads;
 	}
 
 	initialPage: CutiePage {
@@ -33,7 +35,7 @@ CutieWindow {
 		height: mainWindow.height
 		ListView {
 			anchors.fill: parent
-			model: threads
+			model: Store.threads
 			header: CutiePageHeader {
 				id: header
 				title: mainWindow.title
@@ -41,8 +43,13 @@ CutieWindow {
 			delegate: CutieListItem {
 				width: parent ? parent.width : 0
 				id: litem
-				text: model.Sender
-				subText: model.Messages.get(0).Message
+				text: modelData.Sender
+				subText: "Messages" in modelData 
+					? modelData.Messages[modelData.Messages.length - 1].Message 
+					: "-"
+				onClicked: {
+					mainWindow.pageStack.push(threadPage, {thread: modelData})
+				}
 			}
 		}	
 	}
