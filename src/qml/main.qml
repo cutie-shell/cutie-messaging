@@ -35,6 +35,7 @@ CutieWindow {
 			"Messages": [props,]
 		});
 		Store.threads = threads;
+		CutieNotifications.notify("Messaging", 0, "", props.Sender, message, [], {}, 0);
 	}
 
 	initialPage: CutiePage {
