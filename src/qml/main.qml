@@ -15,17 +15,24 @@ CutieWindow {
 		close.accepted = false;
 	}
 
+	Component.onCompleted: {
+		CutieModemSettings.modems.forEach((m) => {
+			m.incomingMessage.connect(incomingMessage);
+		});
+	}
+
 	function view() {
 		visible = true;
 	}
 
-	function incomingMessage(sender, message) {
+	function incomingMessage(message, props) {
+		props.Message = message;
 		let threads = Store.threads;
-		let thread = threads.filter(t => t.Sender == sender)[0];
-		if (thread) thread.Messages.push(message);
+		let thread = threads.filter(t => t.Sender == props.Sender)[0];
+		if (thread) thread.Messages.push(props);
 		else threads.push({
-			"Sender": sender,
-			"Messages": [message,]
+			"Sender": props.Sender,
+			"Messages": [props,]
 		});
 		Store.threads = threads;
 	}

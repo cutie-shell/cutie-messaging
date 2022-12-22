@@ -29,33 +29,8 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, fa
 	if (!parser.isSet(daemonOption))
 		QMetaObject::invokeMethod(engine.rootObjects()[0], "view");
 	connect(this, SIGNAL(instanceStarted()), this, SLOT(onInstanceStarted()));
-
-	qDBusRegisterMetaType<OfonoServicePair>();
-	qDBusRegisterMetaType<OfonoServiceList>();
-	QDBusReply<OfonoServiceList> ofonoModems = QDBusInterface(
-		"org.ofono",
-		"/", 
-		"org.ofono.Manager",
-		QDBusConnection::systemBus()
-	).call("GetModems");
-	if (ofonoModems.isValid()) {
-		foreach (OfonoServicePair p, ofonoModems.value()) {
-			OfonoModem *m = new OfonoModem();
-			m->setPath(p.first.path());
-			m_modems.insert(p.first.path(), m);
-			connect(m, SIGNAL(incomingMessage(QString,QVariantMap)),
-				this, SLOT(onIncomingMessage(QString,QVariantMap)));
-		}
-	}
 }
 
 void Messaging::onInstanceStarted() {
 	QMetaObject::invokeMethod(engine.rootObjects()[0], "view");
-}
-
-void Messaging::onIncomingMessage(QString message, QVariantMap props) {
-	QVariant sender = props.value("Sender");
-	props.insert("Message", message);
-	props.insert("Carrier", ((OfonoModem *)QObject::sender())->simData().value("ServiceProviderName"));
-	QMetaObject::invokeMethod(engine.rootObjects()[0], "incomingMessage", Q_ARG(QVariant, sender), Q_ARG(QVariant, props));
 }

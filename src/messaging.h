@@ -10,7 +10,6 @@
 #include <QDBusMetaType>
 #include <singleapplication.h>
 #include "messagestore.h"
-#include "ofonomodem.h"
 
 class Messaging : public SingleApplication {
 	Q_OBJECT
@@ -18,16 +17,8 @@ public:
 	Messaging(int &argc, char *argv[]);
 public Q_SLOTS:
 	void onInstanceStarted();
-	void onIncomingMessage(QString message, QVariantMap props);
 private:
 	QQmlApplicationEngine engine;
 	QTranslator translator;
 	MessageStore store;
-	QMap<QString,OfonoModem *> m_modems;
 };
-
-typedef QPair<QDBusObjectPath, QVariantMap> OfonoServicePair;
-typedef QList<OfonoServicePair> OfonoServiceList;
-
-Q_DECLARE_METATYPE(OfonoServicePair)
-Q_DECLARE_METATYPE(OfonoServiceList)

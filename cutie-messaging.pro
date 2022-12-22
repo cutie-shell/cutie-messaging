@@ -10,14 +10,12 @@ CONFIG += c++11 core qml quick qtquickcompiler lrelease embed_translations
 SOURCES += \
         src/main.cpp \
         src/messaging.cpp \
-        src/ofonomodem.cpp \
         src/messagestore.cpp
 
 RESOURCES += src/qml/qml.qrc
 RESOURCES += icons/icons.qrc
 HEADERS += \
         src/messaging.h \
-        src/ofonomodem.h \
         src/messagestore.h
 
 INCLUDEPATH += src
