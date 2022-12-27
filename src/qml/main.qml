@@ -61,6 +61,17 @@ CutieWindow {
 				onClicked: {
 					mainWindow.pageStack.push("qrc:/Thread.qml", {threadId: modelData.Sender});
 				}
+
+				menu: CutieMenu {
+					CutieMenuItem {
+						text: qsTr("Delete")
+						onTriggered: {
+							let threads = Store.threads;
+							threads.splice(index, 1);
+							Store.threads = threads;
+						}
+					}
+				}
 			}
 		}	
 	}
