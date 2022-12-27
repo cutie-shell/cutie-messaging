@@ -6,7 +6,6 @@ CutiePage {
 	width: mainWindow.width
 	height: mainWindow.height
 	property var threadId: ""
-	property var thread: Store.threads.filter(t => t.Sender == threadId)[0]
 	CutiePageHeader {
 		id: header
 		title: root.threadId
@@ -23,6 +22,21 @@ CutiePage {
 			id: litem
 			text: modelData.Message
 			subText: modelData.LocalSentTime
+			menu: CutieMenu {
+				CutieMenuItem {
+					text: qsTr("Delete")
+					onTriggered: {
+						let threadIndex = Store.threads.findIndex(t => t.Sender == threadId);
+						let threads = Store.threads;
+						let thread = threads[threadIndex];
+						let msgs = thread.Messages;
+						msgs.splice(index, 1);
+						thread.Messages = msgs;
+						threads[threadIndex] = thread;
+						Store.threads = threads;
+					}
+				}
+			}
 		}
 
 		onCountChanged: {
