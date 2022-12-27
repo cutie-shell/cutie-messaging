@@ -29,11 +29,16 @@ CutieWindow {
 		props.Message = message;
 		let threads = Store.threads;
 		let thread = threads.filter(t => t.Sender == props.Sender)[0];
-		if (thread) thread.Messages.push(props);
-		else threads.push({
-			"Sender": props.Sender,
-			"Messages": [props,]
-		});
+		threads = threads.filter(t => t.Sender != props.Sender);
+		if (thread) {
+			thread.Messages.push(props);
+		} else {
+			thread = {
+				"Sender": props.Sender,
+				"Messages": [props,]
+			};
+		}
+		threads.unshift(thread);
 		Store.threads = threads;
 		CutieNotifications.notify("Messaging", 0, "", props.Sender, message, [], {}, 0);
 	}
