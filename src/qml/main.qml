@@ -8,8 +8,6 @@ CutieWindow {
 	visible: false
 	title: qsTr("Messaging")
 
-	property var threadPage: Qt.createComponent("Thread.qml")
-
 	onClosing: {
 		visible = false;
 		close.accepted = false;
@@ -61,7 +59,7 @@ CutieWindow {
 					? modelData.Messages[modelData.Messages.length - 1].Message 
 					: "-"
 				onClicked: {
-					mainWindow.pageStack.push(threadPage, {thread: modelData})
+					mainWindow.pageStack.push("qrc:/Thread.qml", {threadId: modelData.Sender});
 				}
 			}
 		}	

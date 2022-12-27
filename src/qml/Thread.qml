@@ -5,13 +5,14 @@ CutiePage {
 	id: root
 	width: mainWindow.width
 	height: mainWindow.height
-	property var thread: null
+	property var threadId: ""
+	property var thread: Store.threads.filter(t => t.Sender == threadId)[0]
 	ListView {
 		anchors.fill: parent
-		model: root.thread.Messages
+		model: Store.threads.filter(t => t.Sender == threadId)[0].Messages
 		header: CutiePageHeader {
 			id: header
-			title: root.thread.Sender
+			title: root.threadId
 		}
 		delegate: CutieListItem {
 			width: parent ? parent.width : 0
