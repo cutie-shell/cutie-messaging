@@ -51,6 +51,16 @@ CutieWindow {
 				id: header
 				title: mainWindow.title
 			}
+
+			menu: CutieMenu {
+				CutieMenuItem {
+					text: qsTr("New Message")
+					onTriggered: {
+						pageStack.push("qrc:/SendTo.qml", {})
+					}
+				}
+			}
+
 			delegate: CutieListItem {
 				width: parent ? parent.width : 0
 				id: litem
