@@ -44,7 +44,7 @@ CutieWindow {
 	initialPage: CutiePage {
 		width: mainWindow.width
 		height: mainWindow.height
-		ListView {
+		CutieListView {
 			anchors.fill: parent
 			model: Store.threads
 			header: CutiePageHeader {
