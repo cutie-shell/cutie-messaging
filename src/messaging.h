@@ -15,8 +15,8 @@ class Messaging : public SingleApplication {
 	Q_OBJECT
 public:
 	Messaging(int &argc, char *argv[]);
-public Q_SLOTS:
-	void onInstanceStarted();
+public slots:
+    void onReceivedMessage( int instanceId, QByteArray message );
 private:
 	QQmlApplicationEngine engine;
 	QTranslator translator;

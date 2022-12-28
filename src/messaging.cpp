@@ -1,6 +1,6 @@
 #include "messaging.h"
 
-Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, false) {
+Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, true) {
 	QCoreApplication::setApplicationName("cutie-messaging");
 	QCoreApplication::setApplicationVersion("0.1");
 	QCommandLineParser parser;
@@ -10,7 +10,16 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, fa
 	QCommandLineOption daemonOption(QStringList() << "d" << "daemon",
 		QCoreApplication::translate("main", "Run only as daemon."));
 	parser.addOption(daemonOption);
+	parser.addPositionalArgument("number", 
+		QCoreApplication::translate("main", "The number to open."));
 	parser.process(*this);
+	if(isSecondary()) {
+		if (parser.positionalArguments().count() > 0)
+			sendMessage(parser.positionalArguments().at(0).toUtf8().constData());
+		else
+			sendMessage("");
+		return;
+	} 
 	setQuitOnLastWindowClosed(false);
 	QString locale = QLocale::system().name();
 	translator.load(QString(":/i18n/cutie-messaging_") + locale);
@@ -27,10 +36,16 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, fa
 	engine.load(url);
 
 	if (!parser.isSet(daemonOption))
-		QMetaObject::invokeMethod(engine.rootObjects()[0], "view");
-	connect(this, SIGNAL(instanceStarted()), this, SLOT(onInstanceStarted()));
+		QMetaObject::invokeMethod(engine.rootObjects()[0], "view", 
+			Q_ARG(QVariant, QString(
+				(parser.positionalArguments().count() > 0)
+				? parser.positionalArguments().at(0)
+				: QString()
+			)));
+	connect(this, &SingleApplication::receivedMessage, this, &Messaging::onReceivedMessage);
 }
 
-void Messaging::onInstanceStarted() {
-	QMetaObject::invokeMethod(engine.rootObjects()[0], "view");
+void Messaging::onReceivedMessage(int instanceId, QByteArray message) {
+	Q_UNUSED(instanceId)
+	QMetaObject::invokeMethod(engine.rootObjects()[0], "view", Q_ARG(QVariant, QString(message)));
 }

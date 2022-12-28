@@ -19,8 +19,10 @@ CutieWindow {
 		});
 	}
 
-	function view() {
+	function view(threadId) {
 		visible = true;
+		if (threadId != "")
+			pageStack.push("qrc:/Thread.qml", { threadId });
 	}
 
 	function incomingMessage(message, props) {
