@@ -17,7 +17,7 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, tr
 		if (parser.positionalArguments().count() > 0)
 			sendMessage(parser.positionalArguments().at(0).toUtf8().constData());
 		else
-			sendMessage("");
+			sendMessage(QString("x").toUtf8().constData());
 		return;
 	} 
 	setQuitOnLastWindowClosed(false);
@@ -40,7 +40,7 @@ Messaging::Messaging(int &argc, char *argv[]) : SingleApplication(argc, argv, tr
 			Q_ARG(QVariant, QString(
 				(parser.positionalArguments().count() > 0)
 				? parser.positionalArguments().at(0)
-				: QString()
+				: QString("x")
 			)));
 	connect(this, &SingleApplication::receivedMessage, this, &Messaging::onReceivedMessage);
 }

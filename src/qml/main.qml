@@ -21,7 +21,7 @@ CutieWindow {
 
 	function view(threadId) {
 		visible = true;
-		if (threadId != "")
+		if (threadId != "x")
 			pageStack.push("qrc:/Thread.qml", { threadId });
 	}
 
