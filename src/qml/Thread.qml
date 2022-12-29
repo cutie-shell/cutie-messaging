@@ -16,8 +16,8 @@ CutiePage {
 		anchors.topMargin: header.height
 		anchors.bottomMargin: writeRow.height + 40
 		clip: true
-		model: (Store.threads.filter(t => t.Sender == threadId).length > 0) 
-			? Store.threads.filter(t => t.Sender == threadId)[0].Messages
+		model: (messageStore.data.threads.filter(t => t.Sender == threadId).length > 0) 
+			? messageStore.data.threads.filter(t => t.Sender == threadId)[0].Messages
 			: []
 
 		delegate: CutieListItem {
@@ -29,14 +29,14 @@ CutiePage {
 				CutieMenuItem {
 					text: qsTr("Delete")
 					onTriggered: {
-						let threadIndex = Store.threads.findIndex(t => t.Sender == threadId);
-						let threads = Store.threads;
-						let thread = threads[threadIndex];
+						let data = messageStore.data
+						let threadIndex = data.threads.findIndex(t => t.Sender == threadId);
+						let thread = data.threads[threadIndex];
 						let msgs = thread.Messages;
 						msgs.splice(index, 1);
 						thread.Messages = msgs;
-						threads[threadIndex] = thread;
-						Store.threads = threads;
+						data.threads[threadIndex] = thread;
+						messageStore.data = data;
 					}
 				}
 			}
@@ -61,16 +61,16 @@ CutiePage {
 			onAccepted: {
 				CutieModemSettings.modems[0].sendMessage(threadId, text);
 
-				let threadIndex = Store.threads.findIndex(t => t.Sender == threadId);
-				let threads = Store.threads;
-				let thread = threads[threadIndex];
+				let data = messageStore.data
+				let threadIndex = data.threads.findIndex(t => t.Sender == threadId);
+				let thread = data.threads[threadIndex];
 				if (threadIndex < 0) {
 					thread = {
 						Sender: threadId,
 						Messages: []
 					};
 				} else {
-					threads.splice(threadIndex, 1);
+					data.threads.splice(threadIndex, 1);
 				}
 				let msgs = thread.Messages;
 				msgs.push({
@@ -79,8 +79,8 @@ CutiePage {
 					Message: text
 				});
 				thread.Messages = msgs;
-				threads.unshift(thread);
-				Store.threads = threads;
+				data.threads.unshift(thread);
+				messageStore.data = data;
 
 				text = "";
 			}

@@ -9,7 +9,6 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 #include <singleapplication.h>
-#include "messagestore.h"
 
 class Messaging : public SingleApplication {
 	Q_OBJECT
@@ -20,5 +19,4 @@ public slots:
 private:
 	QQmlApplicationEngine engine;
 	QTranslator translator;
-	MessageStore store;
 };

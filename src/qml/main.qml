@@ -27,9 +27,9 @@ CutieWindow {
 
 	function incomingMessage(message, props) {
 		props.Message = message;
-		let threads = Store.threads;
-		let thread = threads.filter(t => t.Sender == props.Sender)[0];
-		threads = threads.filter(t => t.Sender != props.Sender);
+		let data = messageStore.data;
+		let thread = data.threads.filter(t => t.Sender == props.Sender)[0];
+		data.threads = data.threads.filter(t => t.Sender != props.Sender);
 		if (thread) {
 			thread.Messages.push(props);
 		} else {
@@ -38,17 +38,24 @@ CutieWindow {
 				"Messages": [props,]
 			};
 		}
-		threads.unshift(thread);
-		Store.threads = threads;
+		data.threads.unshift(thread);
+		messageStore.data = data;
 		CutieNotifications.notify("Messaging", 0, "", props.Sender, message, [], {}, 0);
+	}
+
+	CutieStore {
+		id: messageStore
+		storeName: "messages"
 	}
 
 	initialPage: CutiePage {
 		width: mainWindow.width
 		height: mainWindow.height
 		CutieListView {
+			id: lView
 			anchors.fill: parent
-			model: Store.threads
+			model: messageStore.data.threads
+
 			header: CutiePageHeader {
 				id: header
 				title: mainWindow.title
@@ -78,14 +85,13 @@ CutieWindow {
 					CutieMenuItem {
 						text: qsTr("Delete")
 						onTriggered: {
-							let threads = Store.threads;
-							threads.splice(index, 1);
-							Store.threads = threads;
+							let data = messageStore.data;
+							data.threads.splice(index, 1);
+							messageStore.data = data;
 						}
 					}
 				}
 			}
 		}	
 	}
-
 }
