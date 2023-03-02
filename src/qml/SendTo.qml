@@ -35,6 +35,9 @@ CutiePage {
 		anchors.right: parent.right
 		anchors.margins: 20
 		onClicked: {
+			let data = messageStore.data;
+			if (!data.threads) data.threads = [];
+			messageStore.data = data;
 			pageStack.replaceTop("qrc:/Thread.qml", {threadId: recipentText.text});
 		}
 	}

@@ -28,6 +28,7 @@ CutieWindow {
 	function incomingMessage(message, props) {
 		props.Message = message;
 		let data = messageStore.data;
+		if (!data.threads) data.threads = [];
 		let thread = data.threads.filter(t => t.Sender == props.Sender)[0];
 		data.threads = data.threads.filter(t => t.Sender != props.Sender);
 		if (thread) {
