@@ -8,3 +8,5 @@ TryExec=/usr/bin/cutie-messaging
 Icon=cutie-messaging
 Terminal=false
 StartupNotify=false
+Comment=SMS Application
+Categories=Network;Chat;InstantMessaging
