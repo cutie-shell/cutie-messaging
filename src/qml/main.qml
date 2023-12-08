@@ -5,47 +5,12 @@ CutieWindow {
 	id: mainWindow
 	width: 400
 	height: 800
-	visible: false
+	visible: true
 	title: qsTr("Messaging")
-
-	onClosing: {
-		visible = false;
-		close.accepted = false;
-	}
-
-	Component.onCompleted: {
-		CutieModemSettings.modems.forEach((m) => {
-			m.incomingMessage.connect(incomingMessage);
-		});
-	}
-
-	function view(threadId) {
-		visible = true;
-		if (threadId != "x")
-			pageStack.push("qrc:/Thread.qml", { threadId });
-	}
-
-	function incomingMessage(message, props) {
-		props.Message = message;
-		let data = messageStore.data;
-		if (!data.threads) data.threads = [];
-		let thread = data.threads.filter(t => t.Sender == props.Sender)[0];
-		data.threads = data.threads.filter(t => t.Sender != props.Sender);
-		if (thread) {
-			thread.Messages.push(props);
-		} else {
-			thread = {
-				"Sender": props.Sender,
-				"Messages": [props,]
-			};
-		}
-		data.threads.unshift(thread);
-		messageStore.data = data;
-		CutieNotifications.notify("Messaging", 0, "", props.Sender, message, [], {}, 0);
-	}
 
 	CutieStore {
 		id: messageStore
+		appName: "cutie-messaging"
 		storeName: "messages"
 	}
 
