@@ -8,6 +8,12 @@ CutieWindow {
 	visible: true
 	title: qsTr("Messaging")
 
+	function openThread(number) {
+		mainWindow.pageStack.push("qrc:/Thread.qml", {
+			threadId: number
+		});
+	}
+
 	CutieStore {
 		id: messageStore
 		appName: "cutie-messaging"
