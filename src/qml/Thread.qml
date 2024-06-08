@@ -8,7 +8,7 @@ CutiePage {
 	property var threadId: ""
 	CutiePageHeader {
 		id: header
-		title: root.threadId
+		title: nameForNumber(root.threadId)
 		anchors.top: parent.top
 	}
 	CutieListView {
@@ -24,7 +24,10 @@ CutiePage {
 			width: parent ? parent.width : 0
 			id: litem
 			text: modelData.Message
-			subText: qsTr("%1 - %2").arg(modelData.Sender).arg((new Date(modelData.LocalSentTime)).toString())
+			subText: (qsTr("%1 - %2")
+				.arg(nameForNumber(modelData.Sender))
+				.arg((new Date(modelData.LocalSentTime)).toString()))
+
 			menu: CutieMenu {
 				CutieMenuItem {
 					text: qsTr("Delete")
